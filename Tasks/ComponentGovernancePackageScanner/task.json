@@ -1,0 +1,72 @@
+{
+    "id": "A79C1D7F-69E5-4F0C-A3A5-711223D508B5",
+    "name": "ComponentGovernancePackageScanner",
+    "friendlyName": "Component Governance Pacakge Scanner",
+    "description": "Scan your packages with the Component Governance Packge Scanner. Yeah!",
+    "author": "Microsoft Corporation",
+    "helpMarkDown": "[More Information](https://go.microsoft.com/fwlink/?linkid=832194)",
+    "category": "Build",
+    "visibility": [
+        "Build",
+        "Release"
+    ],
+    "runsOn": [
+        "Agent"
+    ],
+    "demands": [],
+    "preview": true,
+    "version": {
+        "Major": 2,
+        "Minor": 0,
+        "Patch": 34
+    },
+    "minimumAgentVersion": "2.0.0",
+    "instanceNameFormat": "CG Package Scanner",
+    "groups": [
+        {
+            "name": "Advanced",
+            "displayName": "Advanced",
+            "isExpanded": false
+        }
+    ],
+    "inputs": [
+        {
+            "name": "verbosity",
+            "type": "boolean",
+            "label": "Verbosity",
+            "defaultValue": "false",
+            "helpMarkDown": "If enabled, additional debug output will be shown.",
+            "required": "false",
+            "groupName": "Advanced"
+        },
+        {
+            "name": "governanceProduct",
+            "type": "string",
+            "label": "Target Product",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "Enter the product name"
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "governanceProduct",
+            "endpointId": "tfs:governance",
+            "endpointUrl": "{{endpoint.url}}/_apis/governance/products",
+            "resultSelector": "jsonpath:$.value[*]",
+            "resultTemplate": "{ \"Value\" : \"{{{id}}}\", \"DisplayValue\" : \"{{{name}}}\" }"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "packagescanner.js",
+            "argumentFormat": ""
+        }
+    },
+    "messages": {
+        "Error_ToolExecution": "Tool failed to execute.",
+        "Error_AuthAck": "Failed to acquire auth",
+        "Error_PackageScannerNotFound": "Unable to locate the Governance Package Scanner.",
+        "Error_ProductNotFound": "Unable to locate the product specified"
+    }
+}

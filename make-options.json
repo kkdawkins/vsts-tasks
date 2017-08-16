@@ -22,6 +22,7 @@
         "CocoaPods",
         "CopyFiles",
         "CopyFilesOverSSH",
+        "ComponentGovernancePackageScanner",
         "cURLUploader",
         "DecryptFile",
         "DeleteFiles",

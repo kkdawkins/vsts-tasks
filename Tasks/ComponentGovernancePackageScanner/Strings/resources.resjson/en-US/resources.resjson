@@ -1,0 +1,15 @@
+{
+  "loc.friendlyName": "Component Governance Pacakge Scanner",
+  "loc.helpMarkDown": "[More Information](https://go.microsoft.com/fwlink/?linkid=832194)",
+  "loc.description": "Scan your packages with the Component Governance Packge Scanner. Yeah!",
+  "loc.instanceNameFormat": "CG Package Scanner",
+  "loc.group.displayName.Advanced": "Advanced",
+  "loc.input.label.verbosity": "Verbosity",
+  "loc.input.help.verbosity": "If enabled, additional debug output will be shown.",
+  "loc.input.label.governanceProduct": "Target Product",
+  "loc.input.help.governanceProduct": "Enter the product name",
+  "loc.messages.Error_ToolExecution": "Tool failed to execute.",
+  "loc.messages.Error_AuthAck": "Failed to acquire auth",
+  "loc.messages.Error_PackageScannerNotFound": "Unable to locate the Governance Package Scanner.",
+  "loc.messages.Error_ProductNotFound": "Unable to locate the product specified"
+}

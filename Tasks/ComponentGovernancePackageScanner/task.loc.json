@@ -1,0 +1,72 @@
+{
+  "id": "A79C1D7F-69E5-4F0C-A3A5-711223D508B5",
+  "name": "ComponentGovernancePackageScanner",
+  "friendlyName": "ms-resource:loc.friendlyName",
+  "description": "ms-resource:loc.description",
+  "author": "Microsoft Corporation",
+  "helpMarkDown": "ms-resource:loc.helpMarkDown",
+  "category": "Build",
+  "visibility": [
+    "Build",
+    "Release"
+  ],
+  "runsOn": [
+    "Agent"
+  ],
+  "demands": [],
+  "preview": true,
+  "version": {
+    "Major": 2,
+    "Minor": 0,
+    "Patch": 34
+  },
+  "minimumAgentVersion": "2.0.0",
+  "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
+  "groups": [
+    {
+      "name": "Advanced",
+      "displayName": "ms-resource:loc.group.displayName.Advanced",
+      "isExpanded": false
+    }
+  ],
+  "inputs": [
+    {
+      "name": "verbosity",
+      "type": "boolean",
+      "label": "ms-resource:loc.input.label.verbosity",
+      "defaultValue": "false",
+      "helpMarkDown": "ms-resource:loc.input.help.verbosity",
+      "required": "false",
+      "groupName": "Advanced"
+    },
+    {
+      "name": "governanceProduct",
+      "type": "string",
+      "label": "ms-resource:loc.input.label.governanceProduct",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "ms-resource:loc.input.help.governanceProduct"
+    }
+  ],
+  "dataSourceBindings": [
+    {
+      "target": "governanceProduct",
+      "endpointId": "tfs:governance",
+      "endpointUrl": "{{endpoint.url}}/_apis/governance/products",
+      "resultSelector": "jsonpath:$.value[*]",
+      "resultTemplate": "{ \"Value\" : \"{{{id}}}\", \"DisplayValue\" : \"{{{name}}}\" }"
+    }
+  ],
+  "execution": {
+    "Node": {
+      "target": "packagescanner.js",
+      "argumentFormat": ""
+    }
+  },
+  "messages": {
+    "Error_ToolExecution": "ms-resource:loc.messages.Error_ToolExecution",
+    "Error_AuthAck": "ms-resource:loc.messages.Error_AuthAck",
+    "Error_PackageScannerNotFound": "ms-resource:loc.messages.Error_PackageScannerNotFound",
+    "Error_ProductNotFound": "ms-resource:loc.messages.Error_ProductNotFound"
+  }
+}
