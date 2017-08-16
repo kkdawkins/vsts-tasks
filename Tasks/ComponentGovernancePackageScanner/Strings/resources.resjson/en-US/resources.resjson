@@ -11,5 +11,7 @@
   "loc.messages.Error_ToolExecution": "Tool failed to execute.",
   "loc.messages.Error_AuthAck": "Failed to acquire auth",
   "loc.messages.Error_PackageScannerNotFound": "Unable to locate the Governance Package Scanner.",
-  "loc.messages.Error_ProductNotFound": "Unable to locate the product specified"
+  "loc.messages.Error_ProductNotFound": "Unable to locate the product specified",
+  "loc.messages.PartialSuccess_PackageScanner": "The Package Scanner partially succeeded. See the logs for more information.",
+  "loc.messages.Error_PackageScanner": "The Package Scanner experienced a failure. See the logs for more information"
 }

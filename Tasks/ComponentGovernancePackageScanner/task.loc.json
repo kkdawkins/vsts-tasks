@@ -67,6 +67,8 @@
     "Error_ToolExecution": "ms-resource:loc.messages.Error_ToolExecution",
     "Error_AuthAck": "ms-resource:loc.messages.Error_AuthAck",
     "Error_PackageScannerNotFound": "ms-resource:loc.messages.Error_PackageScannerNotFound",
-    "Error_ProductNotFound": "ms-resource:loc.messages.Error_ProductNotFound"
+    "Error_ProductNotFound": "ms-resource:loc.messages.Error_ProductNotFound",
+    "PartialSuccess_PackageScanner": "ms-resource:loc.messages.PartialSuccess_PackageScanner",
+    "Error_PackageScanner": "ms-resource:loc.messages.Error_PackageScanner"
   }
 }

@@ -50,14 +50,20 @@ export class packageScanner {
             tl.debug("Product successfully found.");
 
             // 2. Run scanner
-            await this.executePackageScan(dotnetPath, this.filePath, governanceBaseUri + `_apis/Governance/Products/${targetProduct}/RegistrationRequests?api-version=4.0-preview`, authToken);
+            let packageScannerReturn = await this.executePackageScan(dotnetPath, this.filePath, governanceBaseUri + `_apis/Governance/Products/${targetProduct}/RegistrationRequests?api-version=4.0-preview`, authToken);
 
+            if (packageScannerReturn.toString() === "1"){
+                tl.setResult(tl.TaskResult.SucceededWithIssues, tl.loc("PartialSuccess_PackageScanner"));
+            }
+            else if (packageScannerReturn.toString() === "2")
+            {
+                tl.setResult(tl.TaskResult.Failed, tl.loc("Error_PackageScanner"));
+            }
         }
         catch (error){
             tl.error(error);
             tl.setResult(tl.TaskResult.Failed, tl.loc("Error_ToolExecution"));
         }
-
     }
 
     private async executePackageScan(dotnetPath: string, sourcePath: string, serviceUri:string, authToken:string): Promise<number>{
