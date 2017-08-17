@@ -22,25 +22,26 @@ export class packageScanner {
         tl.setResourcePath(path.join(__dirname, "task.json"));
 
         try{
+            // Discover where dotnet is on the build machine. 
             const dotnetPath = tl.which("dotnet", true);
-
+            
             if (!this.filePath){
                 this.filePath = tl.getVariable("System.DefaultWorkingDirectory") || process.cwd();
             }
-
-            tl.debug("Start get token");
 
             // TODO : This is the "correct" way once they enable Org level PATs from Build UX
             // let authToken = tl.getEndpointAuthorizationParameter('SYSTEMVSSCONNECTION', 'ACCESSTOKEN', false);
             let authToken = tl.getVariable("superpat");
 
+            if (authToken === undefined || authToken.length < 1){
+                throw "No auth token defined. Please define the superpat";
+            }
+
             let governanceBaseUri = await this.computeGovernanceServiceURI(authToken);
 
-            tl.debug("Found governance base uri");
-            tl.debug(governanceBaseUri);
+            tl.debug(`Found governance base uri: ${governanceBaseUri}`);
 
             // 1. Validate product exists
-
             let targetProduct = tl.getInput("governanceProduct", true);
 
             if(!this.validateProductExists(governanceBaseUri, authToken, targetProduct)){
