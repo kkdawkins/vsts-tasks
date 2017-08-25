@@ -13,9 +13,12 @@ export class packageScanner {
     private productId: string;
     private filePath: string;
 
+    private APIVERSION: string;
+
     constructor() {
         this.verboseEnabled = tl.getBoolInput("verbosity", false);
         this.filePath = tl.getPathInput("root", false, false);
+        this.APIVERSION = "4.0-preview";
     }
 
     public async execute(){
@@ -31,13 +34,17 @@ export class packageScanner {
 
             // TODO : This is the "correct" way once they enable Org level PATs from Build UX
             // let authToken = tl.getEndpointAuthorizationParameter('SYSTEMVSSCONNECTION', 'ACCESSTOKEN', false);
-            let authToken = tl.getVariable("superpat");
+            let authToken = tl.getVariable("GovernancePat");
 
             if (authToken === undefined || authToken.length < 1){
-                throw "No auth token defined. Please define the superpat";
+                throw tl.loc("Error_AuthTokenNotDefined");
             }
 
+            // 0. Discover where Governance's endpoint is
             let governanceBaseUri = await this.computeGovernanceServiceURI(authToken);
+            if (governanceBaseUri === ""){
+                throw tl.loc("Error_CouldNotComputeGovernanceUrl");
+            }
 
             tl.debug(`Found governance base uri: ${governanceBaseUri}`);
 
@@ -51,7 +58,7 @@ export class packageScanner {
             tl.debug("Product successfully found.");
 
             // 2. Run scanner
-            let packageScannerReturn = await this.executePackageScan(dotnetPath, this.filePath, governanceBaseUri + `_apis/Governance/Products/${targetProduct}/RegistrationRequests?api-version=4.0-preview`, authToken);
+            let packageScannerReturn = await this.executePackageScan(dotnetPath, this.filePath, governanceBaseUri + `_apis/Governance/Products/${targetProduct}/RegistrationRequests?api-version=${this.APIVERSION}`, authToken);
 
             if (packageScannerReturn.toString() === "1"){
                 tl.setResult(tl.TaskResult.SucceededWithIssues, tl.loc("PartialSuccess_PackageScanner"));
@@ -95,19 +102,14 @@ export class packageScanner {
         let registrationRequestAreaId = "03FC139A-0D29-47BC-962A-0BF663090AA1";
         const ApiVersion = "4.0-preview.1";
 
-        // let vssConnection = new vsts.WebApi(governanceOrgBaseUrl, credentialHandler);
-        // let coreApi = vssConnection.getCoreApi();
-
-        // let versionData = await coreApi.vsoClient.getVersioningData(ApiVersion, "Governance", registrationRequestAreaId, { productId: "123" })
-
         let authHandler = accessToken.length == 52 ? vsts.getPersonalAccessTokenHandler(accessToken) : vsts.getBearerHandler(accessToken); 
 
         let vsoRestClient = new cdHelper.ConnectionDataHelper<string>(governanceBaseUrl, [authHandler]);
 
         tl.debug("Trying to find product on:");
-        tl.debug(governanceBaseUrl + `_apis/Governance/Products/${productId}`);
+        tl.debug(governanceBaseUrl + `_apis/Governance/Products/${productId}?api-version=${this.APIVERSION}`);
 
-        let orgConnectionData = await vsoRestClient.http.get(governanceBaseUrl + `_apis/Governance/Products/${productId}`);
+        let orgConnectionData = await vsoRestClient.http.get(governanceBaseUrl + `_apis/Governance/Products/${productId}?api-version=${this.APIVERSION}`);
 
         tl.debug("Status code: " + orgConnectionData.message.statusCode);
         return orgConnectionData.message.statusCode.toString() === "200";
@@ -134,7 +136,6 @@ export class packageScanner {
     private async computeGovernanceServiceURI(accessToken: string): Promise<string> {
         let collectionUrl = tl.getVariable("System.TeamFoundationCollectionUri");
 
-        // TODO : Make auth handler a global property
         let authHandler = accessToken.length == 52 ? vsts.getPersonalAccessTokenHandler(accessToken) : vsts.getBearerHandler(accessToken);
 
         tl.debug("Found collection URL");
@@ -154,8 +155,6 @@ export class packageScanner {
         tl.debug("Found org base URL");
         tl.debug(orgBaseUrl.location);
 
-        //let orgConnectionData = await new cdHelper.ConnectionDataHelper(orgBaseUrl.location, [authHandler]).connectForceUrl(orgBaseUrl.location);
-
         let orgConnectionData = await vsoRestClient.getUnResolvedConnectionData(orgBaseUrl.location);
 
         let govLocationServiceEntry = this.findServiceByIdentifier(orgConnectionData, "bf89950b-58e4-4c83-8e40-ba3163d111bd");
@@ -174,7 +173,6 @@ export class packageScanner {
             }
         }
 
-        // TODO : Throw error
         return "";
     }
 

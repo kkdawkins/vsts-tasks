@@ -1,6 +1,6 @@
 {
   "name": "vsts-tasks-cgpackagescanner",
-  "version": "0.1.0",
+  "version": "4.1.0",
   "description": "Component Governance Package Scanner",
   "main": "packagescanner.js",
   "scripts": {

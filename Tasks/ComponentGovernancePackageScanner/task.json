@@ -16,7 +16,7 @@
     "demands": [],
     "preview": true,
     "version": {
-        "Major": 0,
+        "Major": 4,
         "Minor": 1,
         "Patch": 0
     },
@@ -69,6 +69,8 @@
         "Error_PackageScannerNotFound": "Unable to locate the Governance Package Scanner.",
         "Error_ProductNotFound": "Unable to locate the product specified",
         "PartialSuccess_PackageScanner": "The Package Scanner partially succeeded. See the logs for more information.",
-        "Error_PackageScanner": "The Package Scanner experienced a failure. See the logs for more information"
+        "Error_PackageScanner": "The Package Scanner experienced a failure. See the logs for more information",
+        "Error_CouldNotComputeGovernanceUrl": "Could not compute the Governance base URL",
+        "Error_AuthTokenNotDefined": "No auth token was defined. Please define a build variable called GovernancePat with an org-scoped PAT"
     }
 }
